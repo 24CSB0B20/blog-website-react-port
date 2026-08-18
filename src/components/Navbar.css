@@ -1,0 +1,134 @@
+.navbar {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	flex-wrap: wrap;
+	padding: 1rem 1.5rem;
+	position: relative;
+}
+
+#logo {
+	text-align: center;
+}
+
+#logo a {
+	font-size: 1.1rem;
+	color: var(--text);
+	font-weight: 700;
+	border-bottom: 2px solid transparent;
+	transition: border-color 0.3s ease;
+}
+
+#logo a:hover,
+#logo a:focus {
+	color: #fff;
+	border-bottom-color: var(--accent);
+}
+
+.header-actions {
+	display: flex;
+	align-items: center;
+	gap: 0.75rem;
+}
+
+.theme-toggle {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 2.3rem;
+	height: 2.3rem;
+	border-radius: 50%;
+	border: 1px solid var(--accent);
+	background: transparent;
+	color: var(--text);
+	cursor: pointer;
+	transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.theme-toggle:hover {
+	background: var(--surface);
+	transform: translateY(-2px);
+}
+
+.nav {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: flex-end;
+}
+
+.navItems {
+	margin: 0 0.6rem;
+	padding: 0.25rem 0;
+	border-bottom: 2px solid transparent;
+	transition: border-color 0.3s ease, color 0.3s ease;
+}
+
+.navItems:hover,
+.navItems:focus,
+.navItems.active {
+	color: var(--accent);
+	border-bottom-color: var(--accent);
+}
+
+.nav-toggle {
+	display: none;
+}
+
+@media (max-width: 768px) {
+	.navbar {
+		align-items: center;
+	}
+
+	.nav-toggle {
+		display: inline-flex;
+		flex-direction: column;
+		justify-content: center;
+		gap: 4px;
+		width: 2.3rem;
+		height: 2.3rem;
+		padding: 6px;
+		border: 1px solid var(--accent);
+		border-radius: 6px;
+		background: transparent;
+		cursor: pointer;
+	}
+
+	.nav-toggle span {
+		display: block;
+		width: 100%;
+		height: 2px;
+		border-radius: 2px;
+		background: var(--text);
+		transition: transform 0.2s ease, opacity 0.2s ease;
+	}
+
+	.nav-toggle.is-open span:nth-child(1) {
+		transform: translateY(6px) rotate(45deg);
+	}
+
+	.nav-toggle.is-open span:nth-child(2) {
+		opacity: 0;
+	}
+
+	.nav-toggle.is-open span:nth-child(3) {
+		transform: translateY(-6px) rotate(-45deg);
+	}
+
+	.nav {
+		display: none;
+		flex-direction: column;
+		align-items: center;
+		width: 100%;
+		margin-top: 0.75rem;
+		padding-top: 0.5rem;
+		border-top: 1px solid var(--surface-hover);
+	}
+
+	.nav.nav-open {
+		display: flex;
+	}
+
+	.navItems {
+		margin: 0.4rem 0;
+	}
+}

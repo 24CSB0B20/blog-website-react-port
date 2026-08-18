@@ -1,0 +1,29 @@
+.skill-group {
+	margin-bottom: 1.25rem;
+}
+
+.skill-group h3 {
+	margin: 0 0 0.5rem;
+	font-size: 1rem;
+	color: var(--text);
+}
+
+.chips {
+	display: flex;
+	flex-wrap: wrap;
+}
+
+.chip {
+	background: var(--surface);
+	color: var(--text);
+	border-radius: 20px;
+	padding: 0.35rem 0.9rem;
+	margin: 0.25rem 0.3rem 0 0;
+	font-size: 0.9rem;
+	transition: background 0.2s ease;
+}
+
+.chip:hover {
+	background: var(--accent);
+	color: #fff;
+}

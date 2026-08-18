@@ -1,0 +1,33 @@
+footer {
+	background: var(--surface);
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	gap: 1.5rem;
+	padding: 1rem;
+}
+
+footer a {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 2rem;
+	height: 2rem;
+	transition: transform 0.2s ease;
+}
+
+footer a:hover {
+	transform: translateY(-4px);
+}
+
+footer img {
+	width: 100%;
+}
+
+.footer-inv {
+	filter: grayscale(100%) invert(100%);
+}
+
+[data-theme="light"] .footer-inv {
+	filter: grayscale(100%);
+}
