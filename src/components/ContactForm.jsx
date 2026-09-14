@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { submitContact } from '../api'
 import './ContactForm.css'
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
@@ -17,7 +18,9 @@ const EMPTY_FORM = { name: '', email: '', message: '' }
 export default function ContactForm() {
   const [form, setForm] = useState(EMPTY_FORM)
   const [touched, setTouched] = useState({})
-  const [submitted, setSubmitted] = useState(false)
+  const [submittedName, setSubmittedName] = useState('')
+  const [serverError, setServerError] = useState('')
+  const [sending, setSending] = useState(false)
 
   const errors = validate(form)
   const isValid = Object.keys(errors).length === 0
@@ -25,23 +28,46 @@ export default function ContactForm() {
   const handleChange = (e) => {
     const { name, value } = e.target
     setForm((prev) => ({ ...prev, [name]: value }))
+    setServerError('')
   }
 
   const handleBlur = (e) => {
     setTouched((prev) => ({ ...prev, [e.target.name]: true }))
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
     setTouched({ name: true, email: true, message: true })
-    if (!isValid) return
-    setSubmitted(true)
+    setServerError('')
+    // Always POST so a DevTools bypass of the disabled button still shows server errors.
+
+    setSending(true)
+    try {
+      await submitContact({
+        name: form.name.trim(),
+        email: form.email.trim(),
+        message: form.message.trim(),
+      })
+      setSubmittedName(form.name.trim())
+      setForm(EMPTY_FORM)
+      setTouched({})
+    } catch (err) {
+      setSubmittedName('')
+      setServerError(
+        err instanceof TypeError
+          ? 'Cannot reach the API. Start the backend in /server and try again.'
+          : err.message || 'Could not send your message.',
+      )
+    } finally {
+      setSending(false)
+    }
   }
 
   const handleReset = () => {
     setForm(EMPTY_FORM)
     setTouched({})
-    setSubmitted(false)
+    setSubmittedName('')
+    setServerError('')
   }
 
   return (
@@ -106,10 +132,16 @@ export default function ContactForm() {
         )}
       </div>
 
-      {submitted && (
+      {serverError && (
+        <p className="form-error" role="alert">
+          {serverError}
+        </p>
+      )}
+
+      {submittedName && (
         <p className="form-success" role="status">
-          Thanks, {form.name}! This is front-end only for now — reach me at
-          dr24csb0b20@student.nitw.ac.in.
+          Thanks, {submittedName}! Your message was saved. I will get back to you at
+          dr24csb0b20@student.nitw.ac.in if needed.
         </p>
       )}
 
@@ -117,8 +149,8 @@ export default function ContactForm() {
         <button className="btn" type="reset">
           Reset
         </button>
-        <button className="btn btn-accent" type="submit" disabled={!isValid}>
-          Send
+        <button className="btn btn-accent" type="submit" disabled={!isValid || sending}>
+          {sending ? 'Sending...' : 'Send'}
         </button>
       </div>
     </form>

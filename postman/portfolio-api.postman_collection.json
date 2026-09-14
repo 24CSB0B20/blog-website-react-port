@@ -1,0 +1,131 @@
+{
+  "info": {
+    "name": "Portfolio API (B1–B7)",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": "Covers health, projects, contact, 404s, validation failures, and malformed JSON."
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3001"
+    }
+  ],
+  "item": [
+    {
+      "name": "B1 GET / health",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{baseUrl}}/"
+      }
+    },
+    {
+      "name": "B2 GET /api/projects",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{baseUrl}}/api/projects"
+      }
+    },
+    {
+      "name": "B3 GET /api/projects/:id success",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{baseUrl}}/api/projects/quantsim"
+      }
+    },
+    {
+      "name": "B3 GET /api/projects/:id not found",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{baseUrl}}/api/projects/does-not-exist"
+      }
+    },
+    {
+      "name": "B4 POST /api/contact success",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Ada\",\n  \"email\": \"ada@example.com\",\n  \"message\": \"Hello from Postman\"\n}"
+        },
+        "url": "{{baseUrl}}/api/contact"
+      }
+    },
+    {
+      "name": "B4 POST /api/contact missing name",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"ada@example.com\",\n  \"message\": \"Hello\"\n}"
+        },
+        "url": "{{baseUrl}}/api/contact"
+      }
+    },
+    {
+      "name": "B4 POST /api/contact invalid email",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Ada\",\n  \"email\": \"not-an-email\",\n  \"message\": \"Hello\"\n}"
+        },
+        "url": "{{baseUrl}}/api/contact"
+      }
+    },
+    {
+      "name": "B5 GET /api/contact",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{baseUrl}}/api/contact"
+      }
+    },
+    {
+      "name": "B6 GET /api/doesnotexist",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{baseUrl}}/api/doesnotexist"
+      }
+    },
+    {
+      "name": "B6 POST malformed JSON",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{not-json"
+        },
+        "url": "{{baseUrl}}/api/contact"
+      }
+    }
+  ]
+}

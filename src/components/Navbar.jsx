@@ -30,21 +30,7 @@ export default function Navbar({ theme, toggleTheme }) {
         <Link to="/">donchackoupdates.com</Link>
       </div>
 
-      <div className="header-actions">
-        <ThemeToggle theme={theme} onToggle={toggleTheme} />
-        <button
-          type="button"
-          className={`nav-toggle${menuOpen ? ' is-open' : ''}`}
-          aria-expanded={menuOpen}
-          aria-controls="site-nav"
-          aria-label="Toggle navigation menu"
-          onClick={() => setMenuOpen((open) => !open)}
-        >
-          <span aria-hidden="true" />
-          <span aria-hidden="true" />
-          <span aria-hidden="true" />
-        </button>
-      </div>
+      
 
       <nav
         id="site-nav"
@@ -62,7 +48,23 @@ export default function Navbar({ theme, toggleTheme }) {
             {label}
           </NavLink>
         ))}
+        <div className="header-actions">
+        <ThemeToggle theme={theme} onToggle={toggleTheme} />
+        <button
+          type="button"
+          className={`nav-toggle${menuOpen ? ' is-open' : ''}`}
+          aria-expanded={menuOpen}
+          aria-controls="site-nav"
+          aria-label="Toggle navigation menu"
+          onClick={() => setMenuOpen((open) => !open)}
+        >
+          <span aria-hidden="true" />
+          <span aria-hidden="true" />
+          <span aria-hidden="true" />
+        </button>
+      </div>
       </nav>
+      
     </header>
   )
 }

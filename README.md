@@ -1,51 +1,51 @@
-# Personal Portfolio (React)
+# Personal Portfolio (React & Express)
 
-A React port of my static portfolio site for the FSD assignment 2. This is the same site that was
-built with pure HTML5 and CSS3 in the previous assignment (which lives in `blog-website/`), rebuilt
-from scratch with functional components and react-router-dom so it behaves like a multi-page app
-while remaining a single-page app internally. All content still comes from my current resume as of
-03/08/2026.
+A React port of my static portfolio site for FSD Assignment 2, updated for Assignment 3 with a dedicated Node.js/Express backend. Built using Vite, `react-router-dom`, and functional components. Content is based on my resume as of September 14th, 2026.
 
 ## Setup
 
+### Frontend
 ```bash
 npm install
 npm run dev
 ```
+Runs the Vite dev server on `http://localhost:5173`. Production build outputs to `dist/` via `npm run build`.
 
-`npm run dev` starts the Vite dev server on localhost:5173. To produce a production build run
-`npm run build`, which outputs to `dist/`. That's it, nothing else to configure.
+### Backend
+```bash
+cd server
+npm install
+npm run dev
+```
+Runs the Express server on `http://localhost:5000` (or your configured `PORT`).
 
-## Design rationale
+## Architecture & Design
 
-I kept the same dark space theme and just broke the one big page into routes: home, about, projects,
-resume and contact. Each page lives in `src/pages` and is made of smaller reusable pieces in
-`src/components`: Navbar, ProjectCard, Skills, ContactForm and so on. The projects list is data
-now, stored as an array in `src/data/projects.js`, and `ProjectCard` knows nothing about specific
-projects; it just receives a project object via props and renders it. `Projects` maps over the array
-and hands each project to a `ProjectCard`, which in turn passes the tech stack down to `TagList`,
-which is the prop drilling requirement (2 levels deep, technically 3 if you count App).
+The site uses a dark space theme split across standard routes (`/`, `/about`, `/projects`, `/resume`, `/contact`).
 
-The theme toggle is the only state lifted all the way up to `App`, because both the toggle button in
-the Navbar and the whole page styling need it. It's passed down as props (`theme` and `toggleTheme`)
-and saved to localStorage so the choice survives a refresh. Everything else is scoped where it
-belongs: the form state stays inside `ContactForm`, and each card's "view details" state stays
-inside its own `ProjectCard`, which is what proves the state isn't shared between cards.
+- **Component Hierarchy:** Pages in `src/pages` pull from UI components in `src/components`.
+- **State Scope:** Theme state is lifted to `App` so the Navbar toggle and body styling share it (saved to `localStorage`). Form inputs stay local to `ContactForm`, and card toggle states stay inside `ProjectCard`.
+- **Prop Drilling:** Projects pass tech stacks down through `Projects` → `ProjectCard` → `TagList`.
 
-## useEffect hooks
+## useEffect Hooks
 
-There are three of them, and each one is actually doing something:
+- `Home`: Runs a ~1-second loading timer on mount (cleared on unmount).
+- `App`: Syncs theme updates to `localStorage`.
+- `Navbar`: Listens for `window` resize events to auto-close the mobile menu above 768px.
 
-- `Home` runs a `setTimeout` on mount (empty `[]` dependency array) that fakes a ~1 second loading
-  sequence before showing the hero, with `clearTimeout` in the cleanup so it doesn't leak.
-- `App` writes the theme to localStorage in an effect that runs whenever the theme changes, and
-  reads it back on initial load via a lazy `useState` initializer.
-- `Navbar` adds a `window` resize listener to auto-close the mobile menu once the viewport grows
-  past 768px, and removes it in the cleanup function.
+## Assignment 3 - Backend Integration
 
-## Known limitations
+The project now also connects to a custom Express API in `/server` instead of relying on static mock data files or client-only logic.
 
-The contact form still doesn't submit anywhere, same as before. It just validates and shows a
-thank-you message. That's for a future backend assignment. Also, since the assignment bans UI
-libraries and global state managers, the component props get a bit verbose in places, but it's a
-necessary tradeoff to meet the requirements.
+### Endpoints (B1–B5)
+- `GET /`: API health check (returns `{ "status": "ok" }`).
+- `GET /api/projects`: Serves the list of projects.
+- `GET /api/projects/:id`: Serves details for a single project (returns JSON 404 if invalid).
+- `POST /api/contact`: Validates input (`name`, `email`, `message`) and saves submission (returns HTTP 400 on error, HTTP 201 on success).
+- `GET /api/contact`: Retrieves all stored form submissions (*Note: Left intentionally unauthenticated for assignment evaluation*).
+
+### Error Handling & Middleware (B6 & B7)
+- **Centralized Error Handling (B6):** Undefined routes return a JSON `404` error payload. Internal server errors are caught by a global middleware handler to prevent raw HTML/stack trace leaks or server crashes.
+- **CORS & Environment Setup (B7):** Cross-Origin Resource Sharing (CORS) is enabled to allow frontend requests from the Vite dev server. Environment variables (`PORT`, allowed origins) are loaded via `dotenv`, with `.env.example` provided as a template.
+
+Videos for both assignment 2 and 3 are found in the GitHub Repository.
